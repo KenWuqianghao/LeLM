@@ -1,0 +1,28 @@
+# Data
+data/raw/
+data/processed/
+
+# Model outputs
+outputs/
+
+# Environment
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Model files
+*.gguf
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
