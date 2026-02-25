@@ -26,9 +26,9 @@ def load_dataset_from_jsonl(path):
 
 def formatting_func(example, tokenizer):
     """Apply the chat template to a single example."""
-    return tokenizer.apply_chat_template(
+    return [tokenizer.apply_chat_template(
         example["messages"], tokenize=False, add_generation_prompt=False
-    )
+    )]
 
 
 def train():
