@@ -24,13 +24,6 @@ def load_dataset_from_jsonl(path):
     return Dataset.from_list(examples)
 
 
-def formatting_func(example, tokenizer):
-    """Apply the chat template to a single example."""
-    return [tokenizer.apply_chat_template(
-        example["messages"], tokenize=False, add_generation_prompt=False
-    )]
-
-
 def train():
     cfg = load_config()
 
@@ -56,6 +49,18 @@ def train():
     print("Loading datasets...")
     train_dataset = load_dataset_from_jsonl(cfg["data"]["train_path"])
     val_dataset = load_dataset_from_jsonl(cfg["data"]["val_path"])
+
+    # Pre-map chat templates to text column (Unsloth's expected pattern)
+    def formatting_prompts_func(examples):
+        convos = examples["messages"]
+        texts = [
+            tokenizer.apply_chat_template(convo, tokenize=False, add_generation_prompt=False)
+            for convo in convos
+        ]
+        return {"text": texts}
+
+    train_dataset = train_dataset.map(formatting_prompts_func, batched=True)
+    val_dataset = val_dataset.map(formatting_prompts_func, batched=True)
 
     print(f"  Train: {len(train_dataset)} examples")
     print(f"  Val:   {len(val_dataset)} examples")
@@ -84,7 +89,6 @@ def train():
             dataset_text_field="text",
             eval_strategy="epoch",
         ),
-        formatting_func=lambda example: formatting_func(example, tokenizer),
     )
 
     print("Starting training...")
