@@ -11,7 +11,7 @@ dependencies = [
     "peft>=0.12",
     "bitsandbytes>=0.43",
     "pyyaml>=6.0",
-    "python-dotenv>=1.0",
+    "python-dotenv>=1.2.2",
 ]
 
 [project.optional-dependencies]
